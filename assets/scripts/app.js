@@ -1,9 +1,9 @@
 class Product {
-    title = 'DEFAULT';
-    imageUrl;
-    description;
-    price;
-
+    // title = 'DEFAULT';
+    // imageUrl;
+    // description;
+    // price;
+    // // inside constructor is 'class property', if we comment the above, it still works
     constructor(title, image, desc, price) {
         this.title = title;
         this.imageUrl = image;
