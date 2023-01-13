@@ -3,7 +3,7 @@ class Product {
     // imageUrl;
     // description;
     // price;
-    // // inside constructor is 'class property', if we comment the above, it still works
+    // // above is called 'class fields', inside constructor is 'class property', if we comment the above, it still works
     constructor(title, image, desc, price) {
         this.title = title;
         this.imageUrl = image;
@@ -13,8 +13,31 @@ class Product {
 }
 // console.log(new Product());
 
-const productList = {
-    products: [
+class ProductItem {
+    constructor(product) {
+        this.product = product
+    }
+
+    render() {
+        const prodEl = document.createElement('li')
+        prodEl.className = 'product-item'
+        prodEl.innerHTML = `
+            <div>
+                <img src="${this.product.imageUrl}" alt="${this.product.title}" />
+                <div class="product-item__content">
+                    <h2>${this.product.title}</h2>
+                    <h3>\$${this.product.price}</h3>
+                    <p>${this.product.description}</p>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+        `;
+        return prodEl
+    }
+}
+
+class ProductList {
+    products = [
         new Product(
             'A Pillow',
             'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.slKai5OCE06BzTKxg6nUtgHaHa%26pid%3DApi&f=1&ipt=c1a29749fc340860cb3ee6bef75242fef169ebf9e4d1240addf22a851edf8028&ipo=images',
@@ -27,29 +50,23 @@ const productList = {
             'A carpet which you might like - or not.',
             89.99
         )
-    ],
+    ]
+
+    constructor() {}
+
     render() {
         const renderHook = document.getElementById('app')
         const prodList = document.createElement('ul')
         prodList.className = 'product-list'
         for (const prod of this.products) {
-            const prodEl = document.createElement('li')
-            prodEl.className = 'product-item'
-            prodEl.innerHTML = `
-                <div>
-                    <img src="${prod.imageUrl}" alt="${prod.title}" />
-                    <div class="product-item__content">
-                        <h2>${prod.title}</h2>
-                        <h3>\$${prod.price}</h3>
-                        <p>${prod.description}</p>
-                        <button>Add to Cart</button>
-                    </div>
-                </div>
-            `;
+            const productItem = new ProductItem(prod)
+            const prodEl = productItem.render()
             prodList.append(prodEl)
         }
         renderHook.append(prodList)
     }
 }
 
+
+const productList = new ProductList()
 productList.render()
