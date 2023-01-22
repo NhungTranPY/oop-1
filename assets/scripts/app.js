@@ -21,9 +21,11 @@ class ElementAttribute {
 }
 
 class Component {
-    constructor(renderHookId) {
+    constructor(renderHookId, shouldRender = true) {
         this.hookId = renderHookId
-        this.render()
+        if (shouldRender) {
+            this.render()
+        }
     }
 
     render() {}
@@ -78,8 +80,9 @@ class ShoppingCart extends Component {
 
 class ProductItem extends Component {
     constructor(product, renderHookId) {
-        super(renderHookId)
+        super(renderHookId, false)
         this.product = product
+        this.render()
     }
 
     addToCart() {
@@ -107,29 +110,41 @@ class ProductItem extends Component {
 }
 
 class ProductList extends Component {
-    products = [
-        new Product(
-            'A Pillow',
-            'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.slKai5OCE06BzTKxg6nUtgHaHa%26pid%3DApi&f=1&ipt=c1a29749fc340860cb3ee6bef75242fef169ebf9e4d1240addf22a851edf8028&ipo=images',
-            'A soft pillow',
-            19.19
-        ),
-        new Product(
-            'A Carpet',
-            'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.ZobBsKpwKY7dZVblJqUBjQHaFj%26pid%3DApi&f=1&ipt=44fa6eb3cdaac4b50f7ba5445d013aa8075f885b6f454bf0590f03845c227add&ipo=images',
-            'A carpet which you might like - or not.',
-            89.99
-        )
-    ]
+    products = []
 
     constructor(renderHookId) {
         super(renderHookId)
+        this.fetchProducts()       
+    }
+
+    fetchProducts() {
+        this.products = [
+            new Product(
+                'A Pillow',
+                'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.slKai5OCE06BzTKxg6nUtgHaHa%26pid%3DApi&f=1&ipt=c1a29749fc340860cb3ee6bef75242fef169ebf9e4d1240addf22a851edf8028&ipo=images',
+                'A soft pillow',
+                19.19
+            ),
+            new Product(
+                'A Carpet',
+                'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.ZobBsKpwKY7dZVblJqUBjQHaFj%26pid%3DApi&f=1&ipt=44fa6eb3cdaac4b50f7ba5445d013aa8075f885b6f454bf0590f03845c227add&ipo=images',
+                'A carpet which you might like - or not.',
+                89.99
+            )
+        ]
+        this.renderProducts()
+    }
+
+    renderProducts() {
+        for (const prod of this.products) {
+            new ProductItem(prod, 'prod-list')
+        }
     }
 
     render() {
         this.createRootElement('ul', 'product-list', [new ElementAttribute('id', 'prod-list')])
-        for (const prod of this.products) {
-            new ProductItem(prod, 'prod-list')
+        if (this.products && this.products.length > 0) {
+            this.renderProducts()
         }
     }
 }
